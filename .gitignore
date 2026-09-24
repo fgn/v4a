@@ -1,0 +1,5 @@
+/bin/
+/.task/
+*.test
+/coverage.out
+/coverage.html

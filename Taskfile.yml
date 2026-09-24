@@ -1,0 +1,99 @@
+# https://taskfile.dev
+version: "3"
+
+env:
+  CGO_ENABLED: "0"
+
+vars:
+  GOLANGCI_LINT_VERSION: 2.13.2
+  GOVULNCHECK_VERSION: 1.7.0
+  MARKDOWNLINT_VERSION: 0.23.3
+  FUZZTIME: 30s
+
+tasks:
+  install:gofumpt:
+    status:
+      - which gofumpt
+    preconditions:
+      - sh: which go
+        msg: "please, install go"
+    cmds:
+      # https://github.com/mvdan/gofumpt
+      - go install mvdan.cc/gofumpt@latest
+  install:golangci-lint:
+    status:
+      - test -f ./bin/golangci-lint
+      - ./bin/golangci-lint --version | grep -F '{{.GOLANGCI_LINT_VERSION}}'
+    cmds:
+      # https://golangci-lint.run/welcome/install/#binaries
+      - >
+        curl -sSfL
+        https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh
+        | sh -s -- -b ./bin v{{.GOLANGCI_LINT_VERSION}}
+  install:govulncheck:
+    status:
+      - which govulncheck
+      - "govulncheck --version | grep -Fx 'Scanner: govulncheck@v{{.GOVULNCHECK_VERSION}}'"
+    cmds:
+      - go install golang.org/x/vuln/cmd/govulncheck@v{{.GOVULNCHECK_VERSION}}
+
+  format:
+    desc: run all code formatters
+    cmds:
+      - task: install:gofumpt
+      - gofumpt -w .
+      - go mod edit -fmt
+      - go mod tidy
+  lint:golangci-lint:
+    cmds:
+      - task: install:golangci-lint
+      - ./bin/golangci-lint run --timeout 120s
+  lint:govulncheck:
+    cmds:
+      - task: install:govulncheck
+      - govulncheck ./...
+  lint:mod:
+    desc: check that go.mod is tidy
+    cmds:
+      - go mod tidy -diff
+  lint:markdown:
+    preconditions:
+      - sh: which npx
+        msg: "please, install node"
+    cmds:
+      - npx --yes markdownlint-cli2@{{.MARKDOWNLINT_VERSION}} "**/*.md"
+  lint:
+    desc: run all linters
+    cmds:
+      - task: lint:golangci-lint
+      - task: lint:govulncheck
+      - task: lint:mod
+      - task: lint:markdown
+  test:
+    desc: run all tests with the race detector
+    env:
+      CGO_ENABLED: "1" # the race detector needs cgo
+    cmds:
+      - go test {{ .CLI_ARGS | default "-race -count=1 -cover -timeout 120s ./..." }}
+  test:cover:
+    desc: write coverage.out and print coverage per function
+    cmds:
+      - go test -count=1 -coverprofile=coverage.out ./...
+      - go tool cover -func=coverage.out
+  fuzz:
+    desc: fuzz the diff parser (override the duration with FUZZTIME=5m)
+    cmds:
+      - go test -run '^$' -fuzz '^FuzzApply$' -fuzztime {{.FUZZTIME}} .
+  doc:
+    desc: print the package documentation as pkg.go.dev will show it
+    cmds:
+      - go doc -all .
+  all:
+    desc: run all code formatters, linters, and tests
+    cmds:
+      - task: format
+      - task: lint
+      - task: test
+  default:
+    cmds:
+      - task: all
