@@ -1,6 +1,11 @@
+// Copyright (c) 2026 Fredrik Gustafsson
 // Copyright (c) 2025 OpenAI
 // SPDX-License-Identifier: MIT
-// Strict update-only adaptation of the V4A parser. See LICENSE.
+//
+// A strict, update-only Go port of applyDiff from the OpenAI Agents SDK for
+// JavaScript:
+// https://github.com/openai/openai-agents-js/blob/main/packages/agents-core/src/utils/applyDiff.ts
+// See LICENSE.
 
 package v4a
 

@@ -1,7 +1,10 @@
 // Package v4a applies V4A update diffs strictly.
 //
 // V4A is the context-anchored patch format that OpenAI models emit through
-// the apply_patch tool. An update diff looks like this:
+// the apply_patch tool. This package is a Go port of applyDiff from the
+// OpenAI Agents SDK for JavaScript
+// (https://github.com/openai/openai-agents-js). An update diff looks like
+// this:
 //
 //	@@ def greet():
 //	-    print("Hi")

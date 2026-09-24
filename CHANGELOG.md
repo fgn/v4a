@@ -2,5 +2,5 @@
 
 ## Unreleased
 
-- Initial version: strict, update-only V4A diff applier with `Apply` and
-  `ApplyBatch`.
+- Initial version: a strict, update-only Go port of `applyDiff` from the
+  OpenAI Agents SDK for JavaScript, with `Apply` and `ApplyBatch`.
