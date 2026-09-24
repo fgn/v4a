@@ -32,12 +32,8 @@ type readSectionResult struct {
 }
 
 // Apply applies one V4A update diff to input and returns the patched text.
-// Mode must be "update"; creating, deleting, and moving files is left to the
-// caller.
-func Apply(input, diff, mode string) (string, error) {
-	if mode != "update" {
-		return "", errors.New("only update is permitted")
-	}
+// Creating, deleting, and moving files is left to the caller.
+func Apply(input, diff string) (string, error) {
 	return ApplyBatch(input, []string{diff})
 }
 

@@ -22,7 +22,7 @@ go get github.com/fgn/v4a
 input := "def greet():\n    print(\"Hi\")\n"
 diff := "@@ def greet():\n-    print(\"Hi\")\n+    print(\"Hello\")"
 
-output, err := v4a.Apply(input, diff, "update")
+output, err := v4a.Apply(input, diff)
 ```
 
 `ApplyBatch` applies several diffs for one file against the same original

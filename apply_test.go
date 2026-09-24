@@ -38,7 +38,7 @@ func TestStrictUpdates(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			got, err := Apply(tc.input, tc.diff, "update")
+			got, err := Apply(tc.input, tc.diff)
 			if (err != nil) != tc.failed || got != tc.want {
 				t.Fatalf("got %q, %v; want %q, failure=%v", got, err, tc.want, tc.failed)
 			}

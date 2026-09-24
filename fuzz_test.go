@@ -18,7 +18,7 @@ func FuzzApply(f *testing.F) {
 		f.Add(seed[0], seed[1])
 	}
 	f.Fuzz(func(t *testing.T, input, diff string) {
-		output, err := Apply(input, diff, "update")
+		output, err := Apply(input, diff)
 		if err != nil && output != "" {
 			t.Fatalf("error %v returned output %q", err, output)
 		}
@@ -26,7 +26,7 @@ func FuzzApply(f *testing.F) {
 			return
 		}
 		// CRLF input must behave exactly like LF input and keep its newlines.
-		crlf, crlfErr := Apply(strings.ReplaceAll(input, "\n", "\r\n"), diff, "update")
+		crlf, crlfErr := Apply(strings.ReplaceAll(input, "\n", "\r\n"), diff)
 		if (err == nil) != (crlfErr == nil) || crlf != strings.ReplaceAll(output, "\n", "\r\n") {
 			t.Fatalf("LF gave %q, %v; CRLF gave %q, %v", output, err, crlf, crlfErr)
 		}

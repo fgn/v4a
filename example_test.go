@@ -9,7 +9,7 @@ import (
 func ExampleApply() {
 	input := "def greet():\n    print(\"Hi\")\n"
 	diff := "@@ def greet():\n-    print(\"Hi\")\n+    print(\"Hello\")"
-	output, err := v4a.Apply(input, diff, "update")
+	output, err := v4a.Apply(input, diff)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -22,7 +22,7 @@ func ExampleApply() {
 
 func ExampleApply_strict() {
 	// Whitespace differences are not forgiven.
-	_, err := v4a.Apply("  indented\n", "-indented\n+changed", "update")
+	_, err := v4a.Apply("  indented\n", "-indented\n+changed")
 	fmt.Println(err)
 	// Output: target must match exactly once
 }
