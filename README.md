@@ -1,5 +1,9 @@
 # v4a
 
+> **Deprecated:** use [`github.com/fgn/applypatch`](https://github.com/fgn/applypatch).
+> `applypatch.Apply` and `applypatch.ApplyBatch` behave like this package, and
+> it adds a Codex-compatible mode and the Codex `*** Begin Patch` format.
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/fgn/v4a.svg)](https://pkg.go.dev/github.com/fgn/v4a)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 

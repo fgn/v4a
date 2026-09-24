@@ -1,5 +1,8 @@
 // Package v4a applies V4A update diffs strictly.
 //
+// Deprecated: use github.com/fgn/applypatch, whose Apply and ApplyBatch
+// behave like this package's.
+//
 // V4A is the context-anchored patch format that OpenAI models emit through
 // the apply_patch tool. This package is a Go port of applyDiff from the
 // OpenAI Agents SDK for JavaScript
